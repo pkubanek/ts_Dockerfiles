@@ -1,4 +1,4 @@
-FROM lsstts/develop-env
+FROM lsstts/develop-env:20190418
 
 MAINTAINER Andres Anania <aanania@lsst.org>
 
