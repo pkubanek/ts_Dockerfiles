@@ -1,4 +1,4 @@
-FROM lsstts/develop-env
+FROM lsstts/develop-env:20190508
 
 MAINTAINER Andres Anania <aanania@lsst.org>
 
@@ -9,7 +9,7 @@ ENV TSREPOS=/home/saluser/repos
 
 RUN git clone https://github.com/lsst-ts/pythonFileReader.git -b develop
 RUN git clone https://github.com/lsst-ts/pythonCommunicator.git -b develop
-RUN git clone https://github.com/lsst-ts/ts_salobjATHexapod.git
+RUN git clone https://github.com/lsst-ts/ts_salobjATHexapod.git -b tickets/DM-19601
 
 RUN source /opt/lsst/software/stack/loadLSST.bash && setup lsst_distrib && \
     cd ${TSREPOS}/pythonFileReader && \
