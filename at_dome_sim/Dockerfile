@@ -1,4 +1,4 @@
-FROM lsstts/develop-env:20190509 
+FROM lsstts/develop-env:20190610_sal3.10_salobj3.12 
 
 WORKDIR /home/saluser/repos
 RUN cd ts_config_attcs && git pull

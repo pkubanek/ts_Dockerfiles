@@ -1,4 +1,4 @@
-FROM lsstts/develop-env:20190509
+FROM lsstts/develop-env:20190610_sal3.10.0_salobj3.12.0
 
 MAINTAINER Andres Anania <aanania@lsst.org>
 
