@@ -1,0 +1,89 @@
+version: '3.6'
+services:
+    atmcs-sim:
+        image: lsstts/at_mcs_sim:0.4_sal3.10_salobj3.12
+        container_name: atmcs-sim
+        environment:
+            - LSST_DDS_DOMAIN=auxtelpath
+        networks:
+          lab-priv-network:
+            ipv4_address: 10.0.100.216
+
+        entrypoint: ["/home/saluser/.setup.sh"]
+  
+    atdome-sim:
+        image: lsstts/at_dome_sim:v0.6.1_sal3.10_salobj4
+        container_name: atdome-sim
+        environment:
+            - LSST_DDS_DOMAIN=auxtelpath
+        networks:
+          lab-priv-network:
+            ipv4_address: 10.0.100.214
+
+        entrypoint: ["/home/saluser/.setup.sh"]
+
+    atdometrajectory-sim:
+        image: lsstts/at_dome_trajectory_sim:0.6_sal3.10_salobj3.12
+        container_name: atdometrajectory-sim
+        environment:
+            - LSST_DDS_DOMAIN=auxtelpath
+        networks:
+          lab-priv-network:
+            ipv4_address: 10.0.100.215
+
+        entrypoint: ["/home/saluser/.setup.sh"]
+
+    atpneumatics-sim:
+        image: lsstts/at_pneumatics_sim:0.2_sal3.10_salobj3.12
+        container_name: atpneumatics-sim
+        environment:
+            - LSST_DDS_DOMAIN=auxtelpath
+        networks:
+          lab-priv-network:
+            ipv4_address: 10.0.100.217
+
+        entrypoint: ["/home/saluser/.setup.sh"]
+
+    ataos-sim:
+        image: lsstts/ataos:v1.1.0_sal3.10.0_salobj3.12.0
+        container_name: ataos-sim
+        environment:
+            - LSST_DDS_DOMAIN=auxtelpath
+        networks:
+          lab-priv-network: 10.0.100.208
+
+        entrypoint: ["/home/saluser/.setup.sh"]
+  
+    atptg-sim:
+        image: tiagorib/ptkernel:develop
+        container_name: atptg-sim
+        environment:
+            - LSST_DDS_DOMAIN=auxtelpath
+        networks:
+          lab-priv-network: 10.0.100.218
+
+    athexapod-sim:
+      image: lsstts/ts_athexapod:develop_sal3.10_salobj3.12
+      container_name: athexapod-sim
+      environment:
+        - LSST_DDS_DOMAIN=auxtelpath
+      volumes:
+        - ./startCSC.sh:/home/saluser/startCSC.sh
+        - ./tcpConfiguration.pontus.yaml:/home/saluser/repos/ts_salobjATHexapod/bin/settingFiles/Test/1/tcpConfiguration.yaml
+      networks:
+        lab-priv-network:
+          ipv4_address: 10.0.100.222
+      entrypoint: ["/home/saluser/startCSC.sh"]
+      depends_on:
+        - hexapod-sim
+
+    hexapod-sim:
+      image: couger01/hexapod_simulator
+      container_name: hexapod-sim
+      networks:
+        lab-priv-network:
+          ipv4_address: 10.0.100.223
+
+networks:
+  lab-priv-network:
+    external: true
