@@ -50,7 +50,8 @@ services:
         environment:
             - LSST_DDS_DOMAIN=auxtelpath
         networks:
-          lab-priv-network: 10.0.100.208
+          lab-priv-network: 
+            ipv4_address: 10.0.100.208
 
         entrypoint: ["/home/saluser/.setup.sh"]
   
@@ -60,7 +61,8 @@ services:
         environment:
             - LSST_DDS_DOMAIN=auxtelpath
         networks:
-          lab-priv-network: 10.0.100.218
+          lab-priv-network: 
+            ipv4_address: 10.0.100.218
 
     athexapod-sim:
       image: lsstts/ts_athexapod:develop_sal3.10_salobj3.12
