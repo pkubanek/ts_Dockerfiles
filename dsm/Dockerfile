@@ -1,7 +1,6 @@
-ARG salobj_version=5.0.0
-ARG xml_version=4.4.1
+ARG deploy_env_tag=salobj_v5.3.0_xml_v4.6.0
 
-FROM lsstts/deploy-env:salobj_v${salobj_version}_xml_v${xml_version}
+FROM lsstts/deploy-env:${deploy_env_tag}
 
 ARG dsm_csc_branch=master
 ARG dsm_config_branch=master
