@@ -1,0 +1,112 @@
+pipeline {
+    agent any
+    environment {
+        registryCredential = "dockerhub-lssttsadmin"
+
+        dockerImageNameMaster = "lsstts/dsm:master"
+        dockerImageNameDevelop = "lsstts/dsm:develop"
+        dockerImageNameBuild = "lsstts/dsm:b${BUILD_NUMBER}"
+
+        dockerImageMaster = ""
+        dockerImageDevelop = ""
+        dockerImageBuild = ""
+    }    
+
+    stages {
+        stage("Create docker network.") {
+            steps {
+                script {
+                    sh """
+                    docker network create net_b${BUILD_NUMBER} || echo Network exists...
+                    """ 
+                }
+            }
+
+        }    
+        stage("Build Docker image (master)") {
+            when {
+                expression { return env.build_master.toBoolean() }
+            }
+            steps {
+                script {
+                    dockerImageMaster = docker.build(dockerImageNameMaster, "--no-cache --network net_b${BUILD_NUMBER} --build-arg deploy_env_tag=${env.deploy_env_tag} --build-arg dsm_csc_branch=master --build-arg dsm_config_branch=master ./dsm/")
+                }
+            }
+        }
+        stage("Build Docker image (develop)") {
+            when {
+                expression { return env.build_develop.toBoolean() }
+            }
+            steps {
+                script {
+                    dockerImageDevelop = docker.build(dockerImageNameDevelop, "--no-cache --network net_b${BUILD_NUMBER} --build-arg deploy_env_tag=${env.deploy_env_tag} --build-arg dsm_csc_branch=develop --build-arg dsm_config_branch=develop ./dsm/")
+                }
+            }
+        }
+        stage("Build Docker image (tag/branch)") {
+            when {
+                not{
+                    anyOf {
+                        expression { return env.build_develop.toBoolean() }
+                        expression { return env.build_master.toBoolean() }
+                    }
+                }
+            }
+            steps {
+                script {
+                    dockerImageBuild = docker.build(dockerImageNameBuild, "--no-cache --network net_b${BUILD_NUMBER} --build-arg deploy_env_tag=${env.deploy_env_tag} --build-arg dsm_csc_branch=${env.dsm_csc_v} --build-arg dsm_config_branch=${env.dsm_config_v} ./dsm/")
+                }
+            }
+        }
+
+        stage("Push Docker image (master)") {
+            when {
+                expression { return env.build_master.toBoolean() }
+            }
+            steps {
+                script {
+                    docker.withRegistry("", registryCredential) {
+                    dockerImageMaster.push()
+                    }
+                }
+            }
+        }
+        stage("Push Docker image (develop)") {
+            when {
+                expression { return env.build_develop.toBoolean() }
+            }
+            steps {
+                script {
+                    docker.withRegistry("", registryCredential) {
+                    dockerImageDevelop.push()
+                    }
+                }
+            }
+        }
+        stage("Push Docker image (tag/branch)") {
+            when {
+                allOf {
+                    expression { return env.push_tag.toBoolean() }
+                    not{
+                        anyOf {
+                            expression { return env.build_develop.toBoolean() }
+                            expression { return env.build_master.toBoolean() }
+                        }
+                    }
+                }
+            }
+            steps {
+                script {
+                    docker.withRegistry("", registryCredential) {
+                    dockerImageBuild.push()
+                    }
+                }
+            }
+        }        
+    }
+    post {
+        cleanup {
+            sh "docker network rm net_b${BUILD_NUMBER}"
+        }
+    }
+}
