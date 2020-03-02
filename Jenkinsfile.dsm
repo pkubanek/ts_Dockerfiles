@@ -14,6 +14,7 @@ pipeline {
     parameters {
         booleanParam defaultValue: false, description: "Option to build the master/release branch.", name: 'build_master'
         booleanParam defaultValue: false, description: "Option to build the develop branch.", name: 'build_develop'
+        string defaultValue: "42", description: "Build number for the lsstts/deploy-env docker image.", name: 'deploy_env_tag', trim: true
     }
     stages {
         stage("Create docker network.") {
