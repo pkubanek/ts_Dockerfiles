@@ -108,7 +108,7 @@ pipeline {
                     docker.withRegistry("", registryCredential) {
                     dockerImageBuild.push()
                     }
-                    docker.withRegistry("", nexusRegistryCredential) {
+                    docker.withRegistry("https://repo-nexus.lsst.org/nexus/repository/ts-dockerhub", nexusRegistryCredential) {
                     dockerImageBuild.push()
                     }
                 }
