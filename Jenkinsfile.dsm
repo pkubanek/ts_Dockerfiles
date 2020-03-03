@@ -107,6 +107,7 @@ pipeline {
                 script {
                     docker.withRegistry("", registryCredential) {
                     dockerImageBuild.push()
+                    }
                     docker.withRegistry("", nexusRegistryCredential) {
                     dockerImageBuild.push()
                     }
