@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         registryCredential = "dockerhub-lssttsadmin"
+        nexusRegistryCredential = "nexus3-lsst_jenkins"
 
         dockerImageNameMaster = "lsstts/dsm:master"
         dockerImageNameDevelop = "lsstts/dsm:develop"
@@ -105,6 +106,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry("", registryCredential) {
+                    dockerImageBuild.push()
+                    docker.withRegistry("", nexusRegistryCredential) {
                     dockerImageBuild.push()
                     }
                 }
