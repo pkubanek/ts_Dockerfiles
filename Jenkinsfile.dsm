@@ -76,6 +76,12 @@ pipeline {
                     docker.withRegistry("", registryCredential) {
                     dockerImageMaster.push()
                     }
+                    docker.withRegistry("https://ts-dockerhub.lsst.org/", nexusRegistryCredential) {
+                        sh script: """
+                            docker tag ${dockerImageNameMaster} ts-dockerhub.lsst.org/dsm:master
+                            docker push ts-dockerhub.lsst.org/dsm:master
+                        """
+                    }
                 }
             }
         }
@@ -86,7 +92,13 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry("", registryCredential) {
-                    dockerImageDevelop.push()
+                        dockerImageDevelop.push()
+                    }
+                    docker.withRegistry("https://ts-dockerhub.lsst.org/", nexusRegistryCredential) {
+                        sh script: """
+                            docker tag ${dockerImageNameDevelop} ts-dockerhub.lsst.org/dsm:develop
+                            docker push ts-dockerhub.lsst.org/dsm:develop
+                        """
                     }
                 }
             }
