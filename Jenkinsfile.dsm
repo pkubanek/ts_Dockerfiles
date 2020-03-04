@@ -106,10 +106,13 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry("", registryCredential) {
-                    dockerImageBuild.push()
+                        dockerImageBuild.push()
                     }
-                    docker.withRegistry("https://repo-nexus.lsst.org/nexus/repository/ts-dockerhub", nexusRegistryCredential) {
-                    dockerImageBuild.push()
+                    docker.withRegistry("https://ts-dockerhub.lsst.org/", nexusRegistryCredential) {
+                        sh script: """
+                            docker tag ${dockerImageNameBuild} ts-dockerhub.lsst.org/dsm:b${BUILD_NUMBER}
+                            docker push ts-dockerhub.lsst.org/dsm:b${BUILD_NUMBER}
+                        """
                     }
                 }
             }
