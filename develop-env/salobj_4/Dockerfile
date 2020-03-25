@@ -49,6 +49,10 @@ RUN source /opt/lsst/software/stack/loadLSST.bash && \
 
 USER saluser
 
+WORKDIR /home/saluser/repos/ts_idl
+RUN source /opt/lsst/software/stack/loadLSST.bash && \
+    eups declare -r . ts_idl -t current
+
 WORKDIR /home/saluser/repos/ts_sal
 RUN source /opt/lsst/software/stack/loadLSST.bash && setup lsst_distrib && \
     source /home/saluser/repos/ts_sal/setup.env && \
@@ -56,12 +60,6 @@ RUN source /opt/lsst/software/stack/loadLSST.bash && setup lsst_distrib && \
     setup ts_sal -t current && \
     mkdir -p $SAL_WORK_DIR && \
     mkdir -p $TS_SAL_DIR/lib && scons
-
-WORKDIR /home/saluser/repos/ts_idl
-RUN source /opt/lsst/software/stack/loadLSST.bash && setup lsst_distrib && \
-    source /home/saluser/repos/ts_sal/setup.env && \
-    setup ts_sal -t current && \
-    eups declare -r . ts_idl -t current && setup ts_idl -t current && scons
 
 WORKDIR /home/saluser/repos
 RUN mkdir dds
