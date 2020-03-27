@@ -60,7 +60,7 @@ RUN source /opt/lsst/software/stack/loadLSST.bash && setup lsst_distrib && \
     source /home/saluser/repos/ts_sal/setup.env && \
     setup ts_sal -t current && \
     setup ts_idl -t current && \
-    make_idl_files.py --all --exclude MTM2
+    for comp in `ls $TS_XML_DIR/sal_interfaces/ | grep -v xml`; do make_idl_files.py $comp || echo "FAILED to build ${comp}";done
 
 WORKDIR /home/saluser/repos/ts_simactuators
 RUN source /opt/lsst/software/stack/loadLSST.bash && setup lsst_distrib && \
