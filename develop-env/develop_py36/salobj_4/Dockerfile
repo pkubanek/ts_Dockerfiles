@@ -60,7 +60,7 @@ RUN source /opt/lsst/software/stack/loadLSST.bash && setup lsst_distrib && \
     source /home/saluser/repos/ts_sal/setup.env && \
     setup ts_sal -t current && \
     setup ts_idl -t current && \
-    make_idl_files.py --all
+    make_idl_files.py --all --exclude MTM2
 
 WORKDIR /home/saluser/repos/ts_simactuators
 RUN source /opt/lsst/software/stack/loadLSST.bash && setup lsst_distrib && \

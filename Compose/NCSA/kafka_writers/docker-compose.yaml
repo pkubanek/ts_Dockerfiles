@@ -4,7 +4,7 @@ services:
 
   salkafka_115:
     image: lsstts/salkafka:v1.1.0_salobj_v5.4.0_xml_v4.7.0
-    container_name: salkafka_150
+    container_name: salkafka_115
     environment:
       - LSST_DDS_DOMAIN=auxtelpath
       - BROKER_IP=lsst-kafka-0-nts-efd.ncsa.illinois.edu
@@ -26,7 +26,7 @@ services:
 
   salkafka_116:
     image: lsstts/salkafka:v1.1.0_salobj_v5.4.0_xml_v4.7.0
-    container_name: salkafka_151
+    container_name: salkafka_116
     environment:
       - LSST_DDS_DOMAIN=comcampath
       - BROKER_IP=lsst-kafka-0-nts-efd.ncsa.illinois.edu
