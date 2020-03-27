@@ -57,6 +57,7 @@ WORKDIR /home/saluser/repos/ts_sal
 RUN source /opt/lsst/software/stack/loadLSST.bash && setup lsst_distrib && \
     source /home/saluser/repos/ts_sal/setup.env && \
     eups declare -r . ts_sal -t current && \
+    python -c 'from astropy.time import Time; print(Time.now())' && \
     setup ts_sal -t current && \
     mkdir -p $SAL_WORK_DIR && \
     mkdir -p $TS_SAL_DIR/lib && scons
