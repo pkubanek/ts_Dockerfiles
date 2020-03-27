@@ -60,7 +60,7 @@ RUN source /opt/lsst/software/stack/loadLSST.bash && setup lsst_distrib && \
     python -c 'from astropy.time import Time; print(Time.now())' && \
     setup ts_sal -t current && \
     mkdir -p $SAL_WORK_DIR && \
-    mkdir -p $TS_SAL_DIR/lib && scons
+    mkdir -p $TS_SAL_DIR/lib && scons || pytest
 
 WORKDIR /home/saluser/repos
 RUN mkdir dds
